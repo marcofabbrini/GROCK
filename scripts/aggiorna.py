@@ -102,6 +102,7 @@ def readme(imps, quando):
 def main():
     d = scarica()
     now = datetime.now(ZoneInfo("Europe/Rome"))
+    os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
     imps = [sintesi(i) for i in d.get("impianti", [])]
     if not imps:
         sys.exit("nessun impianto nella risposta")
