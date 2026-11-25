@@ -75,7 +75,7 @@ def v(x, u):
 def readme(imps, quando):
     t = [
         "# GROCK · Impianti fotovoltaici di Marco Fabbrini", "",
-        f"Ultimo aggiornamento: **{quando}** (ora italiana). Si aggiorna ogni ora.", "",
+        f"Ultimo aggiornamento: **{quando}** (ora italiana). Si aggiorna ogni 5 minuti circa.", "",
         "Questi dati descrivono i due impianti fotovoltaici con accumulo dell'edificio. "
         "Convenzioni: rete positiva = energia prelevata dalla rete, negativa = energia immessa; "
         "batteria positiva = in carica, negativa = in scarica.", "",
