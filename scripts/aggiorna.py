@@ -49,6 +49,22 @@ def sintesi(i):
     }
 
 
+def sintesi_casa(c):
+    """Luci accese (senza Laboratorio) e gas, letti da Home Assistant tramite il sito. None se non ancora disponibili."""
+    if not isinstance(c, dict):
+        return None
+    u = c.get("gas_unita") or "m3"
+    return {
+        "luci_accese_escluso_laboratorio": c.get("luci_accese"),
+        "gas": {"oggi": r2(c.get("gas_oggi")), "mese": r2(c.get("gas_mese")), "contatore_totale": r2(c.get("gas_totale")), "unita": u},
+        "letto_alle_utc": c.get("ts"),
+    }
+
+
+def r2(x):
+    return None if x is None else round(float(x), 2)
+
+
 def aggiorna_storico(imps, giorno):
     path = os.path.join(ROOT, "data", "storico_giornaliero.csv")
     campi = ["data", "impianto", "produzione_kwh", "consumo_kwh", "immessa_kwh", "prelevata_kwh"]
@@ -72,7 +88,7 @@ def v(x, u):
     return "n.d." if x is None else f"{x} {u}"
 
 
-def readme(imps, quando):
+def readme(imps, quando, casa=None):
     t = [
         "# GROCK · Impianti fotovoltaici di Marco Fabbrini", "",
         f"Ultimo aggiornamento: **{quando}** (ora italiana). Si aggiorna ogni 5 minuti circa.", "",
@@ -94,6 +110,16 @@ def readme(imps, quando):
             f"- Produzione ieri: {v(i['produzione_ieri_kwh'], 'kWh')}",
             f"- Produzione del mese finora: {v(i['produzione_mese_kwh'], 'kWh')}", "",
         ]
+    if casa:
+        g = casa["gas"]
+        u = g["unita"].replace("m3", "m³")
+        t += [
+            "## Casa", "",
+            f"- Luci accese adesso (escluso il Laboratorio): {'n.d.' if casa['luci_accese_escluso_laboratorio'] is None else casa['luci_accese_escluso_laboratorio']}",
+            f"- Gas consumato oggi: {v(g['oggi'], u)}",
+            f"- Gas consumato nel mese: {v(g['mese'], u)}",
+            f"- Lettura totale del contatore del gas: {v(g['contatore_totale'], u)}", "",
+        ]
     t += ["Dati completi in formato macchina: [`data/latest.json`](data/latest.json). "
           "Storico dei totali giornalieri: [`data/storico_giornaliero.csv`](data/storico_giornaliero.csv).", ""]
     return "\n".join(t)
@@ -102,18 +128,18 @@ def readme(imps, quando):
 def main():
     d = scarica()
     now = datetime.now(ZoneInfo("Europe/Rome"))
-    os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
     imps = [sintesi(i) for i in d.get("impianti", [])]
     if not imps:
         sys.exit("nessun impianto nella risposta")
     quando = now.strftime("%d/%m/%Y %H:%M")
-    out = {"aggiornato": now.isoformat(timespec="minutes"), "impianti_online": bool(d.get("online")), "impianti": imps}
+    casa = sintesi_casa(d.get("casa"))
+    out = {"aggiornato": now.isoformat(timespec="minutes"), "impianti_online": bool(d.get("online")), "impianti": imps, "casa": casa}
     with open(os.path.join(ROOT, "data", "latest.json"), "w") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
         f.write("\n")
     aggiorna_storico(imps, now.strftime("%Y-%m-%d"))
     with open(os.path.join(ROOT, "README.md"), "w") as f:
-        f.write(readme(imps, quando))
+        f.write(readme(imps, quando, casa))
 
 
 if __name__ == "__main__":
