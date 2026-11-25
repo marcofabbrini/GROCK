@@ -50,13 +50,25 @@ def sintesi(i):
 
 
 def sintesi_casa(c):
-    """Luci accese (senza Laboratorio) e gas, letti da Home Assistant tramite il sito. None se non ancora disponibili."""
+    """Luci accese (senza Laboratorio) e gas (riscaldamento e ACS), letti da Home Assistant tramite il sito. None se non ancora disponibili."""
     if not isinstance(c, dict):
         return None
-    u = c.get("gas_unita") or "m3"
+    g = c.get("gas") or {}
+
+    def tipo(k):
+        x = g.get(k) or {}
+        return {"oggi": r2(x.get("oggi")), "mese": r2(x.get("mese")), "contatore_totale": r2(x.get("totale"))}
+
+    ris, acs = tipo("riscaldamento"), tipo("acs")
+
+    def somma(k):
+        a, b = ris[k], acs[k]
+        return None if a is None and b is None else round((a or 0) + (b or 0), 2)
+
     return {
         "luci_accese_escluso_laboratorio": c.get("luci_accese"),
-        "gas": {"oggi": r2(c.get("gas_oggi")), "mese": r2(c.get("gas_mese")), "contatore_totale": r2(c.get("gas_totale")), "unita": u},
+        "gas": {"unita": g.get("unita") or "m3", "riscaldamento": ris, "acs": acs,
+                "totale": {"oggi": somma("oggi"), "mese": somma("mese")}},
         "letto_alle_utc": c.get("ts"),
     }
 
@@ -113,12 +125,15 @@ def readme(imps, quando, casa=None):
     if casa:
         g = casa["gas"]
         u = g["unita"].replace("m3", "m³")
+        luci = casa["luci_accese_escluso_laboratorio"]
         t += [
             "## Casa", "",
-            f"- Luci accese adesso (escluso il Laboratorio): {'n.d.' if casa['luci_accese_escluso_laboratorio'] is None else casa['luci_accese_escluso_laboratorio']}",
-            f"- Gas consumato oggi: {v(g['oggi'], u)}",
-            f"- Gas consumato nel mese: {v(g['mese'], u)}",
-            f"- Lettura totale del contatore del gas: {v(g['contatore_totale'], u)}", "",
+            f"- Luci accese adesso (escluso il Laboratorio): {'n.d.' if luci is None else luci}", "",
+            "### Gas", "",
+            f"- Riscaldamento: oggi {v(g['riscaldamento']['oggi'], u)}, nel mese {v(g['riscaldamento']['mese'], u)}",
+            f"- Acqua calda sanitaria (ACS): oggi {v(g['acs']['oggi'], u)}, nel mese {v(g['acs']['mese'], u)}",
+            f"- Totale gas: oggi {v(g['totale']['oggi'], u)}, nel mese {v(g['totale']['mese'], u)}",
+            f"- Letture dei contatori: riscaldamento {v(g['riscaldamento']['contatore_totale'], u)}, ACS {v(g['acs']['contatore_totale'], u)}", "",
         ]
     t += ["Dati completi in formato macchina: [`data/latest.json`](data/latest.json). "
           "Storico dei totali giornalieri: [`data/storico_giornaliero.csv`](data/storico_giornaliero.csv).", ""]
