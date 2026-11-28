@@ -1,0 +1,42 @@
+name: Aggiorna dati impianto
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # ogni 5 minuti (minimo consentito da GitHub)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aggiorna
+  cancel-in-progress: false
+
+jobs:
+  aggiorna:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Scarica i dati
+        env:
+          FV_KEY: ${{ secrets.FV_KEY }}
+        run: python scripts/aggiorna.py
+      - name: Salva se cambiato
+        run: |
+          git config user.name "grock-bot"
+          git config user.email "grock-bot@users.noreply.github.com"
+          OGGI=$(TZ=Europe/Rome date +%Y-%m-%d)
+          if [ "$(cat data/.ultimo_reset 2>/dev/null)" != "$OGGI" ]; then
+            # primo giro del giorno: la cronologia viene ricreata con un solo commit
+            echo "$OGGI" > data/.ultimo_reset
+            git checkout --orphan nuovo
+            git add -A
+            git commit -q -m "Dati impianto $OGGI (cronologia ricreata ogni giorno)"
+            git push -f origin nuovo:main
+          else
+            git add -A
+            git diff --cached --quiet || (git commit -q -m "Aggiornamento dati $(date -u +%Y-%m-%dT%H:%MZ)" && git push)
+          fi

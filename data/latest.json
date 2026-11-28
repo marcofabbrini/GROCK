@@ -1,0 +1,69 @@
+{
+  "aggiornato": "2026-11-28T03:38+01:00",
+  "impianti_online": true,
+  "impianti": [
+    {
+      "id": "casa_mg",
+      "nome": "CASA M&G (secondo e terzo piano)",
+      "batteria_percento": 19.0,
+      "potenza_ora_kw": {
+        "produzione_fotovoltaico": 0.0,
+        "consumo_casa": 0.4,
+        "rete": 0.4,
+        "batteria": 0.0
+      },
+      "energia_oggi_kwh": {
+        "produzione": 0.0,
+        "consumo": 2.2,
+        "immessa_in_rete": 0.0,
+        "prelevata_dalla_rete": 2.2,
+        "batteria_caricata": 0.0,
+        "batteria_scaricata": 0.1
+      },
+      "produzione_ieri_kwh": 11.0,
+      "produzione_mese_kwh": 298.7
+    },
+    {
+      "id": "casa_22",
+      "nome": "CASA 22 (primo piano)",
+      "batteria_percento": 94.0,
+      "potenza_ora_kw": {
+        "produzione_fotovoltaico": 0.0,
+        "consumo_casa": 0.1,
+        "rete": 0.0,
+        "batteria": -0.1
+      },
+      "energia_oggi_kwh": {
+        "produzione": 0.0,
+        "consumo": 0.3,
+        "immessa_in_rete": 0.0,
+        "prelevata_dalla_rete": 0.1,
+        "batteria_caricata": 0.0,
+        "batteria_scaricata": 0.1
+      },
+      "produzione_ieri_kwh": 0.0,
+      "produzione_mese_kwh": 31.3
+    }
+  ],
+  "casa": {
+    "luci_accese_escluso_laboratorio": 0,
+    "gas": {
+      "unita": "m3",
+      "riscaldamento": {
+        "oggi": 0.0,
+        "mese": 7.4,
+        "contatore_totale": 0.6
+      },
+      "acs": {
+        "oggi": 0.0,
+        "mese": 3.4,
+        "contatore_totale": 0.0
+      },
+      "totale": {
+        "oggi": 0,
+        "mese": 10.8
+      }
+    },
+    "letto_alle_utc": "2026-11-28T02:35:00Z"
+  }
+}
