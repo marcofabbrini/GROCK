@@ -1,69 +1,69 @@
 {
-  "aggiornato": "2026-11-28T03:38+01:00",
+  "aggiornato": "2026-11-28T11:50+01:00",
   "impianti_online": true,
   "impianti": [
     {
       "id": "casa_mg",
       "nome": "CASA M&G (secondo e terzo piano)",
-      "batteria_percento": 19.0,
+      "batteria_percento": 21.0,
       "potenza_ora_kw": {
-        "produzione_fotovoltaico": 0.0,
-        "consumo_casa": 0.4,
-        "rete": 0.4,
-        "batteria": 0.0
+        "produzione_fotovoltaico": 5.0,
+        "consumo_casa": 0.6,
+        "rete": 0.1,
+        "batteria": 4.0
       },
       "energia_oggi_kwh": {
-        "produzione": 0.0,
-        "consumo": 2.2,
+        "produzione": 2.3,
+        "consumo": 6.7,
         "immessa_in_rete": 0.0,
-        "prelevata_dalla_rete": 2.2,
-        "batteria_caricata": 0.0,
+        "prelevata_dalla_rete": 5.0,
+        "batteria_caricata": 0.6,
         "batteria_scaricata": 0.1
       },
       "produzione_ieri_kwh": 11.0,
-      "produzione_mese_kwh": 298.7
+      "produzione_mese_kwh": 301.0
     },
     {
       "id": "casa_22",
       "nome": "CASA 22 (primo piano)",
-      "batteria_percento": 94.0,
+      "batteria_percento": 98.0,
       "potenza_ora_kw": {
         "produzione_fotovoltaico": 0.0,
-        "consumo_casa": 0.1,
-        "rete": 0.0,
-        "batteria": -0.1
+        "consumo_casa": 0.0,
+        "rete": -0.6,
+        "batteria": 1.3
       },
       "energia_oggi_kwh": {
-        "produzione": 0.0,
-        "consumo": 0.3,
-        "immessa_in_rete": 0.0,
-        "prelevata_dalla_rete": 0.1,
-        "batteria_caricata": 0.0,
-        "batteria_scaricata": 0.1
+        "produzione": 1.2,
+        "consumo": 0.8,
+        "immessa_in_rete": 0.2,
+        "prelevata_dalla_rete": 0.4,
+        "batteria_caricata": 0.9,
+        "batteria_scaricata": 0.3
       },
       "produzione_ieri_kwh": 0.0,
-      "produzione_mese_kwh": 31.3
+      "produzione_mese_kwh": 32.5
     }
   ],
   "casa": {
-    "luci_accese_escluso_laboratorio": 0,
+    "luci_accese_escluso_laboratorio": 1,
     "gas": {
       "unita": "m3",
       "riscaldamento": {
-        "oggi": 0.0,
-        "mese": 7.4,
-        "contatore_totale": 0.6
+        "oggi": 2.7,
+        "mese": 10.1,
+        "contatore_totale": 3.3
       },
       "acs": {
-        "oggi": 0.0,
-        "mese": 3.4,
-        "contatore_totale": 0.0
+        "oggi": 0.5,
+        "mese": 3.9,
+        "contatore_totale": 0.5
       },
       "totale": {
-        "oggi": 0,
-        "mese": 10.8
+        "oggi": 3.2,
+        "mese": 14.0
       }
     },
-    "letto_alle_utc": "2026-11-28T02:35:00Z"
+    "letto_alle_utc": "2026-11-28T10:50:00Z"
   }
 }
